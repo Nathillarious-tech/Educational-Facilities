@@ -99,120 +99,120 @@ def main():
 
 
     st.markdown("---")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("School Type Distribution 🏫")
+        school_counts = (
+        filtered_data["facility_type_display"].value_counts().head(5).reset_index(name="count")
+        )
 
-    st.subheader("School Type Distribution 🏫")
-    school_counts = (
-    filtered_data["facility_type_display"]
-    .value_counts()
-        .reset_index(name="count")
-    )
+        fig1 = px.bar(
+            school_counts,
+            x="facility_type_display",
+            y="count",
+            labels={"facility_type_display": "School Type", "count": "Number of Schools"},
+            color="facility_type_display",
+            color_discrete_sequence=px.colors.sequential.Viridis
+        )
+        fig1.update_layout(height=400)
+        st.plotly_chart(fig1, use_container_width=True)
 
-    fig1 = px.bar(
-        school_counts,
-        x="facility_type_display",
-        y="count",
-        labels={"facility_type_display": "School Type", "count": "Number of Schools"},
-        color="facility_type_display",
-        color_discrete_sequence=px.colors.sequential.Viridis
-    )
-    fig1.update_layout(height=400)
-    st.plotly_chart(fig1, use_container_width=True)
+    with col2:
+        st.subheader("Student Population Distribution 🧑‍🎓")
+        fig2 = px.histogram(
+                    filtered_data,
+                    x="total_students",
+                    nbins=50,
+                    color_discrete_sequence=px.colors.sequential.Viridis
+                )
 
-    st.markdown("---")
-
-    st.subheader("Student Population Distribution 🧑‍🎓")
-    fig2 = px.histogram(
-                filtered_data,
-                x="total_students",
-                nbins=50,
-                color_discrete_sequence=px.colors.sequential.Viridis
-            )
-
-    fig2.update_layout(height=450)
-    st.plotly_chart(fig2, use_container_width=True)
+        fig2.update_layout(height=450)
+        st.plotly_chart(fig2, use_container_width=True)
 
 
     st.markdown("---")
-    
-    st.subheader("Public vs Private School Comparison 🏫")
+    col1. col2 = st.columns(2)
+    with col1:
+        st.subheader("Public vs Private School Comparison 🏫")
 
-    management_stats = (
-        filtered_data.groupby("management")["total_students"]
-        .mean()
-        .reset_index()
-    )
+        management_stats = (
+            filtered_data.groupby("management")["total_students"]
+            .mean()
+            .reset_index()
+        )
 
-    fig3 = px.bar(
-        management_stats,
-        x="management",
-        y="total_students",
-        labels={"total_students": "Average Students"},
-        color="management",
-        color_discrete_sequence=px.colors.sequential.Plasma
-    )
+        fig3 = px.bar(
+            management_stats,
+            x="management",
+            y="total_students",
+            labels={"total_students": "Average Students"},
+            color="management",
+            color_discrete_sequence=px.colors.sequential.Plasma
+        )
 
-    fig3.update_layout(height=450)
-    st.plotly_chart(fig3, use_container_width=True)
+        fig3.update_layout(height=450)
+        st.plotly_chart(fig3, use_container_width=True)
 
 
-    st.markdown("---")
-    #chart visual
-    st.subheader("Electricity availability ⚡")
+    with col2:
+        st.subheader("Electricity availability ⚡")
 
-    electricity_counts = (
-        filtered_data["phcn_electricity"]
-        .value_counts()
-        .reset_index(name="count")
-    )
+        electricity_counts = (
+            filtered_data["phcn_electricity"]
+            .value_counts()
+            .reset_index(name="count")
+        )
 
-    fig4 = px.pie(
-        electricity_counts,
-        names="phcn_electricity",
-        values="count",
-        color_discrete_sequence=px.colors.qualitative.Prism,
-        hole=0.4
-    )
-    fig4.update_layout(height=400)
-    st.plotly_chart(fig4, use_container_width=True)
-
-    st.markdown("---")
-    st.subheader("Water and sanitation access 🚰")
-
-    water_counts = (
-        filtered_data["improved_water_supply"]
-        .value_counts()
-        .reset_index(name="count")
-    )
-
-    fig5 = px.pie(
-        water_counts,
-        names="improved_water_supply",
-        values="count",
-        color_discrete_sequence=px.colors.qualitative.Safe,
-        hole=0.4
-    )
-
-    fig5.update_layout(height=400)
-    st.plotly_chart(fig5, use_container_width=True)
+        fig4 = px.pie(
+            electricity_counts,
+            names="phcn_electricity",
+            values="count",
+            color_discrete_sequence=px.colors.qualitative.Prism,
+            hole=0.4
+        )
+        fig4.update_layout(height=400)
+        st.plotly_chart(fig4, use_container_width=True)
 
     st.markdown("---")
-    st.subheader("School Locations Map 🗺️")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Water and sanitation access 🚰")
 
-    fig6 = px.scatter_mapbox(
-    filtered_data,
-    lat="latitude",
-    lon="longitude",
-    hover_name="facility_name",
-    hover_data=["facility_type_display", "management"],
-    zoom=5,
-    height=600
-)
+        water_counts = (
+            filtered_data["improved_water_supply"]
+            .value_counts()
+            .reset_index(name="count")
+        )
 
-    fig6.update_layout(mapbox_style="open-street-map")
+        fig5 = px.pie(
+            water_counts,
+            names="improved_water_supply",
+            values="count",
+            color_discrete_sequence=px.colors.qualitative.Safe,
+            hole=0.4
+        )
 
-    st.plotly_chart(fig6, use_container_width=True)
+        fig5.update_layout(height=400)
+        st.plotly_chart(fig5, use_container_width=True)
 
-    
+    with col2:
+        st.subheader("School Locations Map 🗺️")
+
+        fig6 = px.scatter_mapbox(
+        filtered_data,
+        lat="latitude",
+        lon="longitude",
+        hover_name="facility_name",
+        hover_data=["facility_type_display", "management"],
+        zoom=5,
+        height=600
+    )
+
+        fig6.update_layout(mapbox_style="open-street-map")
+
+        st.plotly_chart(fig6, use_container_width=True)
+
+        
 
     st.markdown("---")
     st.header("📊 Insights & Recommendations")
